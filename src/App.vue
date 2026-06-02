@@ -4,9 +4,11 @@ import JsonInput from './components/JsonInput.vue'
 import JsonOutput from './components/JsonOutput.vue'
 import ErrorPanel from './components/ErrorPanel.vue'
 import TextDiff from './components/TextDiff.vue'
+import JavaObjectFormatter from './components/JavaObjectFormatter.vue'
+import TimestampTool from './components/TimestampTool.vue'
 import { parseJson, type ParseResult } from './lib/json-parser'
 
-const activeTab = ref<'json' | 'diff'>('json')
+const activeTab = ref<'json' | 'diff' | 'java' | 'timestamp'>('json')
 
 const inputJson = ref('')
 const parseResult = ref<ParseResult>({
@@ -134,6 +136,24 @@ const loadExample = () => {
           >
             文本对比
           </button>
+          <button
+            @click="activeTab = 'java'"
+            class="px-4 py-2 text-sm font-medium rounded-t-lg transition-colors border-b-2"
+            :class="activeTab === 'java'
+              ? 'border-primary text-primary bg-primary/10'
+              : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'"
+          >
+            Java对象格式化
+          </button>
+          <button
+            @click="activeTab = 'timestamp'"
+            class="px-4 py-2 text-sm font-medium rounded-t-lg transition-colors border-b-2"
+            :class="activeTab === 'timestamp'
+              ? 'border-primary text-primary bg-primary/10'
+              : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'"
+          >
+            时间戳
+          </button>
         </nav>
       </div>
     </header>
@@ -183,6 +203,16 @@ const loadExample = () => {
       <!-- 文本对比区域 -->
       <div v-show="activeTab === 'diff'" class="flex flex-col flex-1">
         <TextDiff />
+      </div>
+
+      <!-- Java对象格式化区域 -->
+      <div v-show="activeTab === 'java'" class="flex flex-col flex-1">
+        <JavaObjectFormatter />
+      </div>
+
+      <!-- 时间戳工具区域 -->
+      <div v-show="activeTab === 'timestamp'" class="flex flex-col flex-1">
+        <TimestampTool />
       </div>
     </main>
 
