@@ -57,6 +57,11 @@ const handlePaste = () => {
   jsonInputRef.value?.paste()
 }
 
+// 处理输出栏的编辑：将编辑内容同步回输入框
+const handleOutputEdit = (editedText: string) => {
+  inputJson.value = editedText
+}
+
 // 示例 JSON
 const loadExample = () => {
   inputJson.value = `{
@@ -165,10 +170,11 @@ const loadExample = () => {
         <!-- 编辑器区域 -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 min-h-[400px]">
           <JsonInput ref="jsonInputRef" v-model="inputJson" />
-          <JsonOutput 
+          <JsonOutput
             :formatted-json="parseResult.formattedJson"
             :compressed-json="parseResult.compressedJson"
             :success="parseResult.success"
+            @update:formatted-json="handleOutputEdit"
           />
         </div>
 

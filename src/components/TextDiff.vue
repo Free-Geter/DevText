@@ -74,6 +74,10 @@ const stats = computed(() => {
   return { added, removed }
 })
 
+const isIdentical = computed(() => {
+  return hasCompared.value && stats.value.added === 0 && stats.value.removed === 0
+})
+
 // Side-by-side lines
 interface DiffSegment {
   text: string
@@ -453,7 +457,7 @@ const copyText = async (text: string, target: 'left' | 'right' | 'inline') => {
     </div>
 
     <!-- Stats -->
-    <div v-if="hasCompared" class="flex items-center gap-4 text-sm text-muted-foreground">
+    <div v-if="hasCompared && !isIdentical" class="flex items-center gap-4 text-sm text-muted-foreground">
       <span class="flex items-center gap-1">
         <span class="inline-block w-3 h-3 rounded-sm bg-green-900/60"></span>
         新增 <span class="font-mono text-green-300">{{ stats.added }}</span> 行
@@ -462,6 +466,16 @@ const copyText = async (text: string, target: 'left' | 'right' | 'inline') => {
         <span class="inline-block w-3 h-3 rounded-sm bg-red-900/60"></span>
         删除 <span class="font-mono text-red-300">{{ stats.removed }}</span> 行
       </span>
+    </div>
+
+    <!-- Identical message -->
+    <div v-if="isIdentical" class="flex items-center justify-center py-8">
+      <div class="flex items-center gap-2 px-4 py-3 rounded-lg bg-success/10 border border-success/30">
+        <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="text-sm font-medium text-success">两个文件完全一致，没有任何差异</span>
+      </div>
     </div>
 
     <!-- Diff Result -->
